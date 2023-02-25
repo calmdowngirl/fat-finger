@@ -19,7 +19,7 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.background),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         PixelCanvas(
             modifier = Modifier
@@ -43,6 +43,7 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
             onClearCanvas = viewModel::clearCanvas,
             onSettingsClicked = viewModel::toggleCanvasSettings,
             onPaletteClicked = viewModel::togglePalette,
+            onInfoClicked = viewModel::toggleInfo,
         )
 
         if (settingsState.shouldShowCanvasSettings)
@@ -52,6 +53,7 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                 onGridLineColorSelected = viewModel::setGridLineColor,
                 onCanvasBgColorSelected = viewModel::setCanvasBgColor,
                 onGridSizeChange = viewModel::setGridSize,
+                onRestoreDefaultSettings = viewModel::restoreDefaultSettings,
             )
 
         if (settingsState.shouldShowPalette)
@@ -59,7 +61,7 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                 canvasState.fingerColor, onFingerColorSelected = viewModel::setFingerColor
             )
 
-        if (settingsState.shouldShowAbout)
+        if (settingsState.shouldShowInfo)
             About()
     }
 }

@@ -3,7 +3,10 @@ package com.calmdowngirl.fatfinger
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.LayersClear
+import androidx.compose.material.icons.outlined.Palette
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,8 +22,9 @@ fun Settings(
     onClearCanvas: () -> Unit,
     onSettingsClicked: () -> Unit,
     onPaletteClicked: () -> Unit,
+    onInfoClicked: () -> Unit,
 ) {
-    Row(modifier = modifier) {
+    Row(modifier = modifier, horizontalArrangement = Arrangement.SpaceEvenly) {
         IconButton(onClick = onClearCanvas) {
             Icon(
                 Icons.Outlined.LayersClear,
@@ -39,7 +43,7 @@ fun Settings(
                 contentDescription = "Color Palette",
             )
         }
-        IconButton(onClick = onPaletteClicked) {
+        IconButton(onClick = onInfoClicked) {
             Icon(
                 Icons.Outlined.Info,
                 contentDescription = "About",
@@ -55,6 +59,7 @@ fun CanvasSettings(
     onCanvasBgColorSelected: (color: Color) -> Unit,
     onGridLineColorSelected: (color: Color) -> Unit,
     onGridSizeChange: (n: Int) -> Unit,
+    onRestoreDefaultSettings: () -> Unit,
 ) {
     var err by remember {
         mutableStateOf<String?>(null)
@@ -63,79 +68,93 @@ fun CanvasSettings(
     var number by remember {
         mutableStateOf<Int?>(null)
     }
-
-    Box(
+    Column(
         modifier = Modifier
-            .fillMaxWidth(),
-        contentAlignment = Alignment.Center
+            .fillMaxWidth()
+            .padding(start = 35.dp /*top = 16.dp*/),
+        horizontalAlignment = Alignment.Start,
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 20.dp),
-            horizontalAlignment = Alignment.Start,
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start,
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Start,
-            ) {
-                Text("Set Grid Line Color")
-            }
-            CanvasColorPalette(selectedGridLineColor, onGridLineColorSelected)
+            Text("Set Grid Line Color")
+        }
+        CanvasColorPalette(selectedGridLineColor, onGridLineColorSelected)
 
-            Spacer(modifier = Modifier.padding(5.dp))
+        Spacer(modifier = Modifier.padding(5.dp))
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Start,
-            ) {
-                Text("Set Canvas Background Color")
-            }
-            CanvasColorPalette(selectedBgColor, onCanvasBgColorSelected)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start,
+        ) {
+            Text("Set Canvas Background Color")
+        }
+        CanvasColorPalette(selectedBgColor, onCanvasBgColorSelected)
 
-            Spacer(modifier = Modifier.padding(5.dp))
+        Spacer(modifier = Modifier.padding(10.dp))
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Start,
-            ) {
-                OutlinedTextField(
-                    value = if (number == null) "" else number.toString(),
-                    onValueChange = {
-                        if (it.toIntOrNull() != null && it.toIntOrNull() != 0) {
-                            err = if ((it.toIntOrNull() ?: 31) <= 30) null else
-                                "Must be a Positive Integer Not Greater than 30 "
-                            number = it.toIntOrNull()
-                        } else {
-                            err = null
-                            number = null
-                        }
-                    },
-                    label = { Text("Set Number of Grids 16x16 by Default", fontSize = 11.sp) },
-                    isError = err != null,
-                )
-                Box(Modifier.size(12.dp))
-                if (err == null && number != null) {
-                    Box(Modifier.padding(top = 8.dp)) {
-                        Button(
-                            modifier = Modifier.size(56.dp),
-                            onClick = { number?.let { onGridSizeChange(it) } }
-                        ) {
-                            Text("SET", fontSize = 10.sp)
-                        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start,
+        ) {
+            OutlinedTextField(
+                modifier = Modifier
+                    .width(250.dp)
+                    .padding(end = 15.dp),
+                value = if (number == null) "" else number.toString(),
+                onValueChange = {
+                    if (it.toIntOrNull() != null && it.toIntOrNull() != 0) {
+                        err = if ((it.toIntOrNull() ?: 31) <= 30) null else
+                            "Must be a Positive Integer Not Greater than 30 "
+                        number = it.toIntOrNull()
+                    } else {
+                        err = null
+                        number = null
                     }
+                },
+                label = { Text("Set Number of Grids 16x16 by Default", fontSize = 11.sp) },
+                isError = err != null,
+            )
+
+            if (err == null && number != null) {
+                Button(
+                    modifier = Modifier
+                        .size(56.dp)
+                        .padding(top = 8.dp),
+                    onClick = { number?.let { onGridSizeChange(it) } }
+                ) {
+                    Text("SET", fontSize = 10.sp)
                 }
             }
+        }
 
-            if (err != null) {
-                Row {
-                    Text(
-                        text = err.toString(),
-                        style = TextStyle(
-                            color = Color.Red, fontSize = 11.sp, textAlign = TextAlign.End,
-                        ),
-                    )
-                }
+        if (err != null) {
+            Row {
+                Text(
+                    text = err.toString(),
+                    style = TextStyle(
+                        color = Color.Red, fontSize = 11.sp, textAlign = TextAlign.End,
+                    ),
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.padding(10.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Button(
+                modifier = Modifier
+                    .size(width = 250.dp, height = 40.dp)
+                    .padding(top = 8.dp),
+                shape = MaterialTheme.shapes.large,
+                elevation = ButtonDefaults.elevation(0.dp),
+                onClick = onRestoreDefaultSettings,
+            ) {
+                Text("Restore Default Settings", fontSize = 10.sp)
             }
         }
     }

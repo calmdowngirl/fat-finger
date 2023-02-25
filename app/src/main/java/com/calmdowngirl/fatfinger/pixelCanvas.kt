@@ -25,7 +25,7 @@ fun PixelCanvas(
     roundedCorner: Boolean,
     bgColor: Color,
     pixels: MutableMap<String, Map<Color, Offset>>,
-    onTap: (canvasSize: Size,offset: Offset) -> Unit,
+    onTap: (canvasSize: Size, offset: Offset) -> Unit,
 ) {
     var canvasSize by remember { mutableStateOf(Size.Zero) }
 

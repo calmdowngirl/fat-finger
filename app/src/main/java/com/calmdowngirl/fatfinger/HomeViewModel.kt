@@ -23,9 +23,9 @@ data class CanvasState(
 )
 
 data class SettingsState(
-    val shouldShowCanvasSettings: Boolean = false,
+    val shouldShowCanvasSettings: Boolean = true,
     val shouldShowPalette: Boolean = false,
-    val shouldShowAbout: Boolean = false,
+    val shouldShowInfo: Boolean = false,
 )
 
 @HiltViewModel
@@ -42,6 +42,18 @@ class HomeViewModel @Inject constructor() : ViewModel() {
         it.copy(
             pixels = mutableMapOf(),
             triggerCanvasRedraw = !it.triggerCanvasRedraw
+        )
+    }
+
+    fun restoreDefaultSettings() = _canvasState.update {
+        it.copy(
+            fingerColor = Color(0xff6257ff),
+            canvasBgColor = Color(0xfffffdd9),
+            gridLineColor = Color(0xff6257ff),
+            roundedCorner = true,
+            columns = 16,
+            rows = 16,
+            pixels = mutableMapOf(),
         )
     }
 
@@ -94,6 +106,7 @@ class HomeViewModel @Inject constructor() : ViewModel() {
         it.copy(
             shouldShowCanvasSettings = !it.shouldShowCanvasSettings,
             shouldShowPalette = false,
+            shouldShowInfo = false,
         )
     }
 
@@ -101,6 +114,15 @@ class HomeViewModel @Inject constructor() : ViewModel() {
         it.copy(
             shouldShowPalette = !it.shouldShowPalette,
             shouldShowCanvasSettings = false,
+            shouldShowInfo = false,
+        )
+    }
+
+    fun toggleInfo(): Unit = _settingsState.update {
+        it.copy(
+            shouldShowInfo = !it.shouldShowInfo,
+            shouldShowCanvasSettings = false,
+            shouldShowPalette = false,
         )
     }
 }
