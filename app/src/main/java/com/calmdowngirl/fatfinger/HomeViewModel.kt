@@ -3,7 +3,6 @@ package com.calmdowngirl.fatfinger
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Environment
-import android.util.Log
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -34,6 +33,7 @@ data class SettingsState(
     val shouldShowCanvasSettings: Boolean = true,
     val shouldShowPalette: Boolean = false,
     val shouldShowInfo: Boolean = false,
+    val file: String? = null,
 )
 
 @HiltViewModel
@@ -138,7 +138,7 @@ class HomeViewModel @Inject constructor() : ViewModel() {
         )
     }
 
-    fun saveToFile(bitmap: Bitmap, format: String = "PNG") {
+    fun saveToFile(bitmap: Bitmap, format: String = "PNG"): String? {
         val timestamp = System.currentTimeMillis()
         var file: File? = null
         lateinit var outputStream: FileOutputStream
@@ -162,10 +162,11 @@ class HomeViewModel @Inject constructor() : ViewModel() {
             else -> Unit
         }
 
-        Log.d("ffgr", "File: $file")
         file?.let {
             outputStream.flush()
             outputStream.close()
         }
+
+        return file?.canonicalPath
     }
 }
