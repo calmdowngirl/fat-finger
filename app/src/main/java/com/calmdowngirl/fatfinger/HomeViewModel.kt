@@ -1,10 +1,16 @@
 package com.calmdowngirl.fatfinger
 
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.os.Environment
+import android.util.Log
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.io.File
+import java.io.FileOutputStream
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,6 +25,8 @@ data class CanvasState(
     val columns: Int = 16,
     val rows: Int = 16,
     val pixels: MutableMap<String, Map<Color, Offset>> = mutableMapOf(),
+    val bitmap: Bitmap? = null,
+    val shadowCanvas: Canvas = Canvas(),
     val triggerCanvasRedraw: Boolean = false,
 )
 
@@ -55,6 +63,10 @@ class HomeViewModel @Inject constructor() : ViewModel() {
             rows = 16,
             pixels = mutableMapOf(),
         )
+    }
+
+    fun setBitmap(bitmap: Bitmap): Unit = _canvasState.update {
+        it.copy(bitmap = bitmap, shadowCanvas = Canvas(bitmap))
     }
 
     fun setGridSize(n: Int): Unit = _canvasState.update {
@@ -124,5 +136,36 @@ class HomeViewModel @Inject constructor() : ViewModel() {
             shouldShowCanvasSettings = false,
             shouldShowPalette = false,
         )
+    }
+
+    fun saveToFile(bitmap: Bitmap, format: String = "PNG") {
+        val timestamp = System.currentTimeMillis()
+        var file: File? = null
+        lateinit var outputStream: FileOutputStream
+        when (format) {
+            "PNG" -> {
+                file = File(
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                    "ffgr_$timestamp.png"
+                )
+                outputStream = FileOutputStream(file)
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+            }
+            "JPEG", "JPG" -> {
+                file = File(
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                    "ffgr_$timestamp.jpg"
+                )
+                outputStream = FileOutputStream(file)
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            }
+            else -> Unit
+        }
+
+        Log.d("ffgr", "File: $file")
+        file?.let {
+            outputStream.flush()
+            outputStream.close()
+        }
     }
 }

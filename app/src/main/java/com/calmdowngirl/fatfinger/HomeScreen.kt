@@ -10,11 +10,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
     val canvasState by viewModel.canvasState.collectAsStateWithLifecycle()
     val settingsState by viewModel.settingsState.collectAsStateWithLifecycle()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -32,7 +35,9 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
             roundedCorner = canvasState.roundedCorner,
             bgColor = canvasState.canvasBgColor,
             pixels = canvasState.pixels,
-            onTap = viewModel::onFatFingerTap
+            shadowCanvas = canvasState.shadowCanvas,
+            onTap = viewModel::onFatFingerTap,
+            setBitmap = viewModel::setBitmap,
         )
 
         Settings(
@@ -44,6 +49,11 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
             onSettingsClicked = viewModel::toggleCanvasSettings,
             onPaletteClicked = viewModel::togglePalette,
             onInfoClicked = viewModel::toggleInfo,
+            onSaveClicked = {
+                canvasState.bitmap?.let {
+                    viewModel.saveToFile(it)
+                }
+            },
         )
 
         if (settingsState.shouldShowCanvasSettings)

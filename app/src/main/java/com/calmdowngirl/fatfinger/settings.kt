@@ -3,10 +3,7 @@ package com.calmdowngirl.fatfinger
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.LayersClear
-import androidx.compose.material.icons.outlined.Palette
-import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,6 +20,7 @@ fun Settings(
     onSettingsClicked: () -> Unit,
     onPaletteClicked: () -> Unit,
     onInfoClicked: () -> Unit,
+    onSaveClicked: () -> Unit,
 ) {
     Row(modifier = modifier, horizontalArrangement = Arrangement.SpaceEvenly) {
         IconButton(onClick = onClearCanvas) {
@@ -41,6 +39,12 @@ fun Settings(
             Icon(
                 Icons.Outlined.Palette,
                 contentDescription = "Color Palette",
+            )
+        }
+        IconButton(onClick = onSaveClicked) {
+            Icon(
+                Icons.Outlined.Save,
+                contentDescription = "Save to File",
             )
         }
         IconButton(onClick = onInfoClicked) {
