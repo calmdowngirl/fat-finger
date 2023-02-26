@@ -29,25 +29,6 @@ val fontFamilyLobster2 = FontFamily(
 )
 
 val gajrajOne = FontFamily(Font(R.font.gajraj_one_regular))
-val tiltPrism = FontFamily(Font(R.font.tilt_prism_regular_variable_font_xrot_yrot))
-
-/*
-@OptIn(ExperimentalTextApi::class)
-val tiltPrism = GoogleFont("Tilt Prism")
-
-@OptIn(ExperimentalTextApi::class)
-val gajrajOne = GoogleFont("Gajraj One")
-
-@OptIn(ExperimentalTextApi::class)
-val fontFamilyTiltPrism = FontFamily(
-    Font(googleFont = tiltPrism, fontProvider = provider)
-)
-
-@OptIn(ExperimentalTextApi::class)
-val fontFamilyGajrajOne = FontFamily(
-    Font(googleFont = gajrajOne, fontProvider = provider)
-)
-*/
 
 // Set of Material typography styles to start with
 val Typography = Typography(

@@ -1,4 +1,4 @@
-package com.calmdowngirl.fatfinger
+package com.calmdowngirl.fatfinger.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -12,10 +12,10 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.calmdowngirl.fatfinger.R
 import com.calmdowngirl.fatfinger.ui.theme.fontFamilyLobster2
 import com.calmdowngirl.fatfinger.ui.theme.gajrajOne
 
@@ -26,7 +26,6 @@ fun About() {
             .fillMaxSize()
             .padding(top = 25.dp, start = 40.dp, end = 40.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-//        verticalArrangement = Arrangement.Center,
     ) {
         Row(modifier = Modifier.background(Color.White)) {
             Text(
@@ -49,7 +48,6 @@ fun About() {
             Text(
                 "Eh? Just use ur Fat Finger tap on the canvas :P You can find the source code at github.com/calmdowngirl/fat-finger too",
                 style = TextStyle(
-//                    fontWeight = FontWeight(1),
                     fontFamily = fontFamilyLobster2,
                     fontSize = 24.sp,
                     color = Color(0xffdfdfdf),

@@ -1,4 +1,4 @@
-package com.calmdowngirl.fatfinger
+package com.calmdowngirl.fatfinger.components
 
 import android.graphics.Bitmap
 import android.graphics.Canvas

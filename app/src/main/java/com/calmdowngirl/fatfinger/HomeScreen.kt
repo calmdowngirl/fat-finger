@@ -3,6 +3,8 @@ package com.calmdowngirl.fatfinger
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -10,6 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.calmdowngirl.fatfinger.components.About
+import com.calmdowngirl.fatfinger.components.CanvasSettings
+import com.calmdowngirl.fatfinger.components.PixelCanvas
+import com.calmdowngirl.fatfinger.components.Settings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -28,7 +34,8 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colors.background),
+                .background(MaterialTheme.colors.background)
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             PixelCanvas(
