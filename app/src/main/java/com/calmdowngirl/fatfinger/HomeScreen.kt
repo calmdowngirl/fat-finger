@@ -67,7 +67,7 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                     canvasState.bitmap?.let {
                         coroutineScope.launch {
                             scaffoldState.snackbarHostState.showSnackbar(
-                                message = "${viewModel.saveToFile(it)}",
+                                message = "Saved to ${viewModel.saveToFile(it)}",
                             )
                         }
                     }
