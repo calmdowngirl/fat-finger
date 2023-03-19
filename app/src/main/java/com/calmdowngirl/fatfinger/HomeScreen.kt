@@ -1,6 +1,7 @@
 package com.calmdowngirl.fatfinger
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -12,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.calmdowngirl.fatfinger.components.About
 import com.calmdowngirl.fatfinger.components.CanvasSettings
 import com.calmdowngirl.fatfinger.components.PixelCanvas
@@ -21,12 +23,26 @@ import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
+fun HomeScreen(
+    navController: NavController,
+    component: String? = null,
+    viewModel: HomeViewModel = hiltViewModel()
+) {
     val canvasState by viewModel.canvasState.collectAsStateWithLifecycle()
     val settingsState by viewModel.settingsState.collectAsStateWithLifecycle()
 
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(key1 = component) {
+        Log.d("ffgr", component.toString())
+        when (component) {
+            HomeComponent.CanvasSettings.id -> viewModel.showCanvasSettings()
+            HomeComponent.Palette.id -> viewModel.showPalette()
+            HomeComponent.Info.id -> viewModel.showInfo()
+            else -> viewModel.showPalette()
+        }
+    }
 
     Scaffold(
         scaffoldState = scaffoldState
@@ -60,9 +76,9 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                     .padding(10.dp)
                     .background(MaterialTheme.colors.background),
                 onClearCanvas = viewModel::clearCanvas,
-                onSettingsClicked = viewModel::toggleCanvasSettings,
-                onPaletteClicked = viewModel::togglePalette,
-                onInfoClicked = viewModel::toggleInfo,
+                onSettingsClicked = viewModel::showCanvasSettings,
+                onPaletteClicked = viewModel::showPalette,
+                onInfoClicked = viewModel::showInfo,
                 onSaveClicked = {
                     canvasState.bitmap?.let {
                         coroutineScope.launch {
@@ -90,7 +106,7 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                 )
 
             if (settingsState.shouldShowInfo)
-                About()
+                About(navController)
         }
     }
 }
